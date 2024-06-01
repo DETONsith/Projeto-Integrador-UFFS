@@ -16,12 +16,17 @@ __README.MD<br>
 <b>__Documentação</b><br>
 ____/<br>
 ____Requisitos Funcionais.pdf<br>
+____Requisito não Funcionais.pdf<br>
 ____Casos de Uso.png<br>
+____Modelo Conceitual.png<br>
+<b>____Arquivos de projeto</b><br>
+______/<br>
+______modelo_giovani_vitoria.brM3<br>
 <b>__Aplicação</b><br>
 ____/<br>
 ____[A definir]<br>
 <hr>
 <h2><p>Responsáveis pelo projeto: 👫🏽</p></h2>
 
-* Giovani Leal Gonçalves
-* Vitória Queren Santos Moreira
+* Giovani Leal Gonçalves - 2221101046
+* Vitória Queren Santos Moreira - 2221101028
