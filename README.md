@@ -19,9 +19,11 @@ ____Requisitos Funcionais.pdf<br>
 ____Requisito não Funcionais.pdf<br>
 ____Casos de Uso.png<br>
 ____Modelo Conceitual.png<br>
+____Modelo Lógico.png<br>
 <b>____Arquivos de projeto</b><br>
 ______/<br>
 ______modelo_giovani_vitoria.brM3<br>
+______modelo_logico.txt<br>
 <b>__Aplicação</b><br>
 ____/<br>
 ____[A definir]<br>
