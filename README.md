@@ -15,6 +15,7 @@ __/<br>
 __README.MD<br>
 <b>__Documentação</b><br>
 ____/<br>
+____Protótipo das telas.pdf<br>
 ____Requisitos Funcionais.pdf<br>
 ____Requisito não Funcionais.pdf<br>
 ____Casos de Uso.png<br>
@@ -26,7 +27,10 @@ ______modelo_giovani_vitoria.brM3<br>
 ______modelo_logico.txt<br>
 <b>__Aplicação</b><br>
 ____/<br>
-____[A definir]<br>
+____iasd_api<br>
+______/<br>
+____iasd_web<br>
+______/<br>
 <hr>
 <h2><p>Responsáveis pelo projeto: 👫🏽</p></h2>
 
