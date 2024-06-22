@@ -1,20 +1,20 @@
 person
 -
 cd_person int PK
-ds_username string unique
-ds_name string
-ds_password string
-ds_usertype string
-ds_phone string
-ds_email string
+ds_username varchar(100) unique
+ds_name varchar(150)
+ds_password text
+ds_usertype varchar(50)
+ds_phone varchar(17)
+ds_email varchar(100)
 
 liturgy
 -
 cd_liturgy int PK
 cd_preacher NULL int FK >- person.cd_person
-ds_theme string
-ds_description NULL string
-ds_place string
+ds_theme varchar(80)
+ds_description text NULL
+ds_place varchar(100)
 dt_liturgy timestamp
 
 event
@@ -22,31 +22,31 @@ event
 cd_event pk bigint
 cd_liturgy int FK >- liturgy.cd_liturgy
 cd_person int FK >- person.cd_person
-ds_status string
-ds_description string
+ds_status varchar(20)
+ds_description text
 dt_event timestamp
 
 visitor
 -
 cd_visitor int PK
-ds_name string
-ds_phone string
-ds_address string
-ds_mail string NULL
+ds_name varhcar(200)
+ds_phone varchar(15)
+ds_address varchar(200)
+ds_mail varchar(100) NULL
 dt_born date NULL
 x_receive_pray boolean NULL
-ds_receive_pray string NULL
+ds_receive_pray varchar(200) NULL
 x_receive_teaching boolean NULL
-ds_receive_teaching string NULL
+ds_receive_teaching varchar(100) NULL
 x_teaching_friend boolean NULL
 x_church_member boolean NULL
 x_invited boolean NULL
-ds_invitor string NULL
+ds_invitor varchar(150) NULL
 
 theme
 -
 cd_theme int PK
-ds_theme int PK
+ds_theme varchar(40)
 
 visitor_interest_theme
 -
