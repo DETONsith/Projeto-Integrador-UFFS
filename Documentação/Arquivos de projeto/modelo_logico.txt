@@ -29,7 +29,7 @@ dt_event timestamp
 visitor
 -
 cd_visitor int PK
-ds_name varhcar(200)
+ds_name varchar(200)
 ds_phone varchar(15)
 ds_address varchar(200)
 ds_mail varchar(100) NULL
