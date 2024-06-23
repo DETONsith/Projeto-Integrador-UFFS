@@ -1,9 +1,5 @@
--- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
--- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
-
-
 CREATE TABLE person (
-    "cd_person" int   NOT NULL,
+    "cd_person" SERIAL,
     "ds_username" varchar(100)   NOT NULL,
     "ds_name" varchar(150)   NOT NULL,
     "ds_password" text   NOT NULL,
@@ -19,7 +15,7 @@ CREATE TABLE person (
 );
 
 CREATE TABLE liturgy (
-    "cd_liturgy" int   NOT NULL,
+    "cd_liturgy" SERIAL,
     "cd_preacher" int   NULL,
     "ds_theme" varchar(80)   NOT NULL,
     "ds_description" text   NULL,
@@ -31,7 +27,7 @@ CREATE TABLE liturgy (
 );
 
 CREATE TABLE event (
-    "cd_event" bigint   NOT NULL,
+    "cd_event" BIGSERIAL,
     "cd_liturgy" int   NOT NULL,
     "cd_person" int   NOT NULL,
     "ds_status" varchar(20)   NOT NULL,
@@ -43,7 +39,7 @@ CREATE TABLE event (
 );
 
 CREATE TABLE visitor (
-    "cd_visitor" int   NOT NULL,
+    "cd_visitor" SERIAL,
     "ds_name" varchar(200)   NOT NULL,
     "ds_phone" varchar(15)   NOT NULL,
     "ds_address" varchar(200)   NOT NULL,
@@ -63,7 +59,7 @@ CREATE TABLE visitor (
 );
 
 CREATE TABLE theme (
-    "cd_theme" int   NOT NULL,
+    "cd_theme" SERIAL,
     "ds_theme" varchar(40)   NOT NULL,
     CONSTRAINT "pk_theme" PRIMARY KEY (
         "cd_theme"
@@ -71,7 +67,7 @@ CREATE TABLE theme (
 );
 
 CREATE TABLE visitor_interest_theme (
-    "cd_visitor_theme" int   NOT NULL,
+    "cd_visitor_theme" SERIAL,
     "cd_visitor" int   NOT NULL,
     "cd_theme" int   NOT NULL,
     CONSTRAINT "pk_visitor_interest_theme" PRIMARY KEY (
