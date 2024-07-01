@@ -1,4 +1,4 @@
-import Event from '../model/event';
+var Liturgy = require('../model/liturgy');
 default_endpoint = '/liturgy'
 
 const express = require('express');
@@ -49,3 +49,5 @@ api.put(default_endpoint, async (req, res) => {
     res.status(200);
     res.send();
 });
+
+module.exports = api;
