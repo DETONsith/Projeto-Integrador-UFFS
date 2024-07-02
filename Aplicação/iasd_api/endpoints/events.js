@@ -1,4 +1,4 @@
-import Event from '../model/event';
+var Event =  require('../model/event');
 default_endpoint = '/events'
 
 const express = require('express');

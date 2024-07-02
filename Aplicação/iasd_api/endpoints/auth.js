@@ -1,62 +1,82 @@
 var express = require('express');
 var passport = require('passport');
-var LocalStrategy = require('passport-local');
+var LocalStrategy = require('passport-local').Strategy;
 var crypto = require('crypto');
 const db = require('../helper/dbhelper');
 
-express().use(passport.initialize());
+var app = express();
+app.use(passport.initialize());
 
-passport.use(new LocalStrategy(function verify(username, password, done) {
-    console.log(username,password);
-    db.any('SELECT * FROM person WHERE ds_username = $1', [ username ]).then(function(row) {
-        try{
-        if (row.length !== 1) {
-            console.log(row);
-            return done(null,false,{message: 'Incorrect username or password.'});
-        }
-      
-        crypto.pbkdf2Sync(password, row[0].ds_password, 310000, 32, 'sha256', function(err, hashedPassword) {
-            if (err) { return done(err); }
-            if (!crypto.timingSafeEqual(row[0].ds_password, hashedPassword)) {
-              return done(null, false);
-            }
-        
-            const token = crypto.randomBytes(32).toString('hex');
-            return done(null, { token });
-            // db.none('INSERT INTO authenticator (ds_username, ds_token) VALUES ($1, $2)', [username, hashedPassword])
-            //     .then(() => {
-            //         return done(null, { token });
-            //     })
-            //     .catch((err) => {
-            //         return done(err);
-            //     });
+passport.use(new LocalStrategy({
+  usernameField: 'username', // Specify the field names for username and password
+  passwordField: 'password'
+}, function verify(username, password, done) {
+  db.any('SELECT * FROM person WHERE ds_username = $1', [username])
+      .then(function (row) {
+          if (row.length !== 1) {
+              return done(null, false, { message: 'Incorrect username or password.' });
+          }
+
+          const user = row[0];
+          const salt = user.ds_salt;
+          crypto.pbkdf2(password, salt, 310000, 32, 'sha256', function (err, hashedPassword) {
+              if (err) { return done(err); }
+              if (!crypto.timingSafeEqual(Buffer.from(user.ds_password, 'hex'), hashedPassword)) {
+                  return done(null, false, { message: 'Incorrect username or password.' });
+              }
+
+              const token = crypto.randomBytes(32).toString('hex');
+                db.none('INSERT INTO token_handler (cd_person, ds_token) VALUES ($1, $2)', [user.cd_person, token])
+                .then(function () {
+                    return done(null, { token });
+                });
           });
-        }
-        catch (e){
-            console.log(e);
-            return done(e);
-        }
-    });
-  }));
+      })
+      .catch(function (err) {
+          return done(err);
+      });
+}));
 
-  passport.serializeUser(function(user, cb) {
-    process.nextTick(function() {
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
       cb(null, { id: user.cd_person, username: user.ds_username });
-    });
   });
-  
-  passport.deserializeUser(function(user, cb) {
-    process.nextTick(function() {
-      return cb(null, user);
-    });
-  });
+});
 
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
+      return cb(null, user);
+  });
+});
 
 var router = express.Router();
 
-router.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-}));
+router.post('/login', function (req, res, next) {
+  passport.authenticate('local', function (err, user, info) {
+      if (err) { return next(err); }
+      if (!user) { return res.status(401).json({ message: info.message || 'Login failed' }); }
 
-module.exports = router;
+      req.login(user, function (err) {
+          if (err) { return next(err); }
+          return res.json({ message: 'Login successful', token: user.token });
+      });
+  })(req, res, next);
+});
+
+router.get('/logout', function (req, res) {
+  db.none('DELETE FROM token_handler WHERE ds_token = $1', [req.headers['authorization']])
+      .then(function () {
+          req.logout();
+          res.json({ message: 'Logout successful' });
+      })
+      .catch(function (err) {
+          res.status(500).json({ message: 'Internal server error' });
+      });
+});
+
+
+
+app.use(router);
+
+module.exports = app;
+

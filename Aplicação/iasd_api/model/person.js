@@ -8,6 +8,7 @@ const db = require('../helper/dbhelper');
 //     "ds_usertype" varchar(50)   NOT NULL,
 //     "ds_phone" varchar(17)   NOT NULL,
 //     "ds_email" varchar(100)   NOT NULL,
+//     "ds_salt" text   NOT NULL,
 //     CONSTRAINT "pk_person" PRIMARY KEY (
 //         "cd_person"
 //      ),
@@ -37,9 +38,10 @@ class Person {
                 ds_password,
                 ds_usertype,
                 ds_phone,
-                ds_email
+                ds_email,
+                ds_salt
                 )
-            values ($1,$2,$3,$4,$5,$6)
+            values ($1,$2,$3,$4,$5,$6,$7)
             `
             ,[
             person.ds_username,
@@ -47,10 +49,10 @@ class Person {
             person.ds_password,
             person.ds_usertype,
             person.ds_phone,
-            person.ds_email
+            person.ds_email,
+            person.ds_salt
             ]
         );
-        
         
     }
 

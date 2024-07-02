@@ -1,18 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
-import CustomizedTables from './Components/componente_de_teste';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  redirect,
+} from 'react-router-dom';
+import Login from './Screen/login';
+import NotFound from './Screen/NotFound';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <CustomizedTables></CustomizedTables>
-        <p>
-          Teste acima os componentes que você vai criar em <b>iasd_web/src/Components</b>
-        </p>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="/" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 }
 

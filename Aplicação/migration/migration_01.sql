@@ -1,0 +1,1 @@
+alter table person add column ds_salt text not null;

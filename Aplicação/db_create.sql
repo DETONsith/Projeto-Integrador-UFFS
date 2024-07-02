@@ -6,6 +6,7 @@ CREATE TABLE person (
     "ds_usertype" varchar(50)   NOT NULL,
     "ds_phone" varchar(17)   NOT NULL,
     "ds_email" varchar(100)   NOT NULL,
+    "ds_salt" varchar(100)   NOT NULL,
     CONSTRAINT "pk_person" PRIMARY KEY (
         "cd_person"
      ),
@@ -74,6 +75,17 @@ CREATE TABLE visitor_interest_theme (
         "cd_visitor_theme"
      )
 );
+
+CREATE TABLE token_handler(
+    "ds_token" text NOT NULL UNIQUE,
+    "cd_person" int NOT NULL,
+    "dt_created" timestamp NOT NULL DEFAULT now(),
+    CONSTRAINT "pk_token_handler" PRIMARY KEY (
+        "ds_token"
+     ),
+    CONSTRAINT "fk_token_handler_cd_person" FOREIGN KEY("cd_person") REFERENCES person("cd_person")
+);
+
 
 ALTER TABLE liturgy ADD CONSTRAINT "fk_liturgy_cd_preacher" FOREIGN KEY("cd_preacher")
 REFERENCES person ("cd_person");

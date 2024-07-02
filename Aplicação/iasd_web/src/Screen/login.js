@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -21,18 +20,62 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    fetch('http://localhost:3001/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        username: data.get('username'),
-        password: data.get('password')
-      })
-    });
-    console.log(JSON.stringify({
-          username: data.get('username'),
-          password: data.get('password'),
-        }),);
+    try{
+      fetch('http://localhost:3001/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: data.get('username'),
+            password: data.get('password')
+        })
+    })
+    .then(response => {
+      if(response.status === 401){
+        console.log('Usuário ou senha inválidos');
+        setError(true);
+        alert('Usuário ou senha inválidos');
+        return;
+      }
+      if(response.status === 500){
+        console.log('Erro no servidor');
+        setError(true);
+        alert('Erro no servidor');
+        return;
+      }
+      if(response.status === 400){
+        console.log('Campos faltando');
+        setError(true);
+        alert('Campos faltando');
+        return;
+      }
+      if(response.status === 200){
+        setError(false);
+        var data = response.json();
+        const token = data.token;
+        localStorage.setItem('token', token);
+        document.location.href = '/home';
+      }
+      
+    })
+    }
+    catch(e){
+      console.log(e);
+      alert('Erro ao tentar fazer login');
+    }
+    
+
+    
   };
+
+  function spinicon(){
+    document.getElementById('icon').style.animation = 'App-logo-spin 2s linear infinite';
+  }
+
+
+  const [errorhappened, setError] = React.useState(false);
+  const [errormessage, setErrorMessage] = React.useState('');
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -46,8 +89,8 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'black' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: errorhappened?'red':'black'}}>
+            <LockOutlinedIcon/>
           </Avatar>
           <Typography component="h1" variant="h5">
             Entrar no sistema
@@ -62,6 +105,8 @@ export default function SignIn() {
               name="username"
               autoComplete="username"
               autoFocus
+              sx={{ outlineColor: errorhappened?'red':'black'}}
+              error={errorhappened}
             />
             <TextField
               margin="normal"
@@ -72,6 +117,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={errorhappened}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
